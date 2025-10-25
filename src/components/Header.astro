@@ -1,52 +1,55 @@
-<header class="main-header glass-morphism">
-  <nav class="container">
+---
+// This is the mobile-first header with the hamburger menu
+---
+<header class="mobile-header">
+  <div class="container">
     <a href="/" class="brand-logo">bereket designs</a>
-    <div class="nav-actions">
-      <a href="/">Work</a>
-      <a href="/about">About</a>
-      <button id="theme-toggle" title="Toggle theme">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-      </button>
-    </div>
-  </nav>
+    <button id="mobile-menu-toggle" class="menu-button" aria-label="Open Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
 </header>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (!themeToggle) return;
-
-    // !!! THIS IS THE FIX !!!
-    // We explicitly tell TypeScript that the 'theme' parameter is a string.
-    const applyTheme = (theme: string | null) => {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-    };
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      applyTheme(savedTheme);
-    } else {
-      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      applyTheme(isSystemDark ? 'dark' : 'light');
-    }
-
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      const newTheme = isDark ? 'light' : 'dark';
-      applyTheme(newTheme);
-      localStorage.setItem('theme', newTheme);
-    });
-  });
-</script>
 <style>
-  .main-header { position: sticky; top: 1rem; margin: 0 1rem; z-index: 100; border-radius: 16px; }
-  nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
-  .brand-logo { font-weight: 700; font-size: 1.5rem; color: var(--text-color); }
-  .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
-  .nav-actions a { font-weight: 500; color: var(--hint-color); transition: color 0.2s; }
-  .nav-actions a:hover { color: var(--text-color); }
-  #theme-toggle { background: none; border: none; cursor: pointer; color: var(--hint-color); padding: 0.5rem; border-radius: 50%; display: flex; }
-  #theme-toggle:hover { color: var(--text-color); background-color: var(--secondary-bg-color); }
-  .icon-moon, .dark .icon-sun { display: none; }
-  .icon-sun, .dark .icon-moon { display: block; }
+  .mobile-header {
+    display: none; /* Hidden by default on desktop */
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: var(--header-bg-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 1023px) {
+    .mobile-header {
+      display: block; /* Visible on mobile */
+    }
+  }
+
+  .mobile-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+  
+  .brand-logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+
+  .menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 0.5rem;
+  }
 </style>

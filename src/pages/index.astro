@@ -1,5 +1,5 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import PortfolioLayout from '../layouts/PortfolioLayout.astro'; // Use the new layout
 import DesignCard from '../components/DesignCard.astro';
 import { supabase } from '../lib/supabase';
 import type { Design } from '../lib/types';
@@ -8,48 +8,17 @@ let designs: Design[] = [];
 const { data, error } = await supabase.from('designs').select('*').order('created_at', { ascending: false });
 if (data) { designs = data; }
 ---
-<MainLayout title="bereket designs - Portfolio">
-  <!-- The new Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1 class="glowing-text">PORTFOLIO</h1>
-      <!-- IMPORTANT: Replace this placeholder with the URL to your cutout image! -->
-      <img src="https://placehold.co/800x800/ff0000/ffffff.png?text=Your+Cutout+Image" alt="Bereket Tadele" class="hero-image" />
-    </div>
-  </section>
-  
+<PortfolioLayout title="My Work">
   <div class="masonry-grid">
-    {designs.map(design => (
-      <div class="card-wrapper glass-morphism">
-        <DesignCard design={design} />
-      </div>
-    ))}
+    {designs.map(design => <DesignCard design={design} />)}
   </div>
-</MainLayout>
+</PortfolioLayout>
 <style>
-  .hero { height: 60vh; display: flex; align-items: center; justify-content: center; margin-bottom: 4rem; }
-  .hero-content { position: relative; width: 100%; max-width: 800px; display: flex; align-items: center; justify-content: center; }
-  .glowing-text {
-    font-size: clamp(4rem, 15vw, 10rem); /* Responsive font size */
-    font-weight: 900;
-    color: var(--text-color);
-    text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 40px rgba(255, 77, 0, 0.5);
-    z-index: 1;
-    position: relative; /* Changed from absolute */
+  /* Note: We no longer need a separate hero section here */
+  .masonry-grid {
+    column-gap: 1.5rem;
+    column-count: 1;
   }
-  .hero-image {
-    position: absolute;
-    bottom: -10%; /* Adjust to position your cutout */
-    height: 100%;
-    max-height: 500px;
-    width: auto;
-    z-index: 2;
-    object-fit: contain;
-    pointer-events: none; /* Make image non-interactive */
-  }
-
-  .masonry-grid { column-gap: 1.5rem; column-count: 1; }
-  @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
-  @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
-  .card-wrapper { break-inside: avoid; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+  @media (min-width: 1200px) { .masonry-grid { column-count: 3; } }
 </style>
