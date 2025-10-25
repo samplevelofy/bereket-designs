@@ -1,0 +1,75 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { supabase } from '../../lib/supabase';
+import type { Design } from '../../lib/types';
+
+// !!! THIS IS THE FIX !!!
+// This line tells Astro to render this page on the server for every request,
+// instead of trying to build it statically ahead of time.
+export const prerender = false;
+
+const { id } = Astro.params;
+let design: Design | null = null;
+if (id) {
+  const { data } = await supabase.from('designs').select('*').eq('id', id).single();
+  design = data;
+}
+if (!design) { return new Response("Design not found", { status: 404 }); }
+---
+<MainLayout title={design.title}>
+  <a href="/" class="back-link">&larr; All Work</a>
+  <article class="design-detail">
+    <header class="design-header">
+      <h1>{design.title}</h1>
+      <div class="meta-info">
+        <span><strong>Client:</strong> {design.client}</span>
+        <span><strong>Project Type:</strong> {design.project_type}</span>
+      </div>
+    </header>
+    
+    <img src={design.cover_image} alt={design.title} class="hero-image" />
+    
+    <div class="design-content">
+      <div class="main-body">
+        <h2>Creative Brief</h2>
+        <div class="brief-text">
+          {design.creative_brief?.split('\n').map(p => p.trim() && <p>{p}</p>)}
+        </div>
+      </div>
+      <aside class="sidebar">
+        <div class="sidebar-box">
+          <h3>Tools Used</h3>
+          <ul class="tools-list">
+            {design.tools_used?.map(tool => <li>{tool}</li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    {design.gallery_images && design.gallery_images.length > 0 && (
+      <section class="gallery">
+        <h2>Gallery</h2>
+        <div class="gallery-grid">
+          {design.gallery_images.map(imgUrl => <img src={imgUrl} alt="Gallery image" loading="lazy" />)}
+        </div>
+      </section>
+    )}
+  </article>
+</MainLayout>
+<style>
+  .back-link { display: inline-block; margin-bottom: 2rem; font-weight: 500; color: var(--hint-color); }
+  .design-header { text-align: center; padding: 2rem 0; }
+  .design-header h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+  .meta-info { display: flex; justify-content: center; gap: 2rem; color: var(--hint-color); }
+  .hero-image { width: 100%; border-radius: 24px; margin-bottom: 4rem; }
+  .design-content { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+  @media(min-width: 900px) { .design-content { grid-template-columns: 2.5fr 1fr; } }
+  .brief-text p { margin-bottom: 1.5rem; }
+  h2 { font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+  .sidebar-box { background: var(--secondary-bg-color); padding: 1.5rem; border-radius: 16px; position: sticky; top: 100px; }
+  .tools-list { list-style: none; padding: 0; margin: 0; }
+  .tools-list li { background: var(--bg-color); padding: 0.5rem 1rem; border-radius: 8px; margin-bottom: 0.5rem; font-weight: 500; }
+  .gallery { margin-top: 5rem; }
+  .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .gallery-grid img { width: 100%; border-radius: 16px; }
+</style>

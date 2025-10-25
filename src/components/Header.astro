@@ -1,0 +1,17 @@
+<header class="main-header">
+  <nav class="container">
+    <a href="/" class="brand-logo">Your Name</a>
+    <div class="nav-links">
+      <a href="/">Work</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+</header>
+<style>
+  .main-header { position: sticky; top: 0; width: 100%; background-color: var(--header-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid var(--border-color); }
+  nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
+  .brand-logo { font-weight: 700; font-size: 1.5rem; color: var(--text-color); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-weight: 500; color: var(--hint-color); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text-color); }
+</style>

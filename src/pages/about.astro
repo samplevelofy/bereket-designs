@@ -1,0 +1,40 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+<MainLayout title="About Me">
+  <div class="about-page">
+    <div class="content">
+      <img src="https://placehold.co/300x300/f5f5f7/1d1d1f?text=Your+Photo" alt="Your Name" class="profile-photo" />
+      <h1>I'm Your Name, a Graphic Designer with a passion for creating impactful visual identities.</h1>
+      <div class="bio">
+        <p>
+          For over [X] years, I've been helping brands connect with their audiences through clean, strategic, and beautiful design. My process is collaborative and deeply rooted in understanding the "why" behind every project.
+        </p>
+        <p>
+          I specialize in branding, UI/UX design for web and mobile, and custom illustration. My toolbox includes Figma, Adobe Illustrator, and a healthy dose of creative curiosity.
+        </p>
+        <p>
+          When I'm not designing, you can find me [Your Hobby Here, e.g., exploring art galleries, hiking, or trying new coffee shops].
+        </p>
+        <a href="mailto:your.email@example.com" class="contact-btn">Get In Touch</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+<style>
+  .about-page { max-width: 900px; margin: 2rem auto; }
+  .content { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+  @media (min-width: 768px) { .content { grid-template-columns: 300px 1fr; } }
+  .profile-photo { width: 100%; border-radius: 50%; }
+  h1 { font-size: 2.5rem; }
+  .bio p { color: var(--hint-color); }
+  .contact-btn {
+    display: inline-block;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+</style>

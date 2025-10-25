@@ -1,0 +1,152 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { supabase } from '../lib/supabase';
+import type { Design } from '../lib/types';
+import '../styles/admin.css';
+
+let designs: Design[] = [];
+const { data } = await supabase.from('designs').select('*').order('created_at', { ascending: false });
+if (data) { designs = data; }
+---
+<MainLayout title="Admin Panel">
+  <div class="admin-panel">
+    <header class="admin-header"><h1>Admin Panel</h1></header>
+    <section class="admin-section">
+      <h2>Add New Design Project</h2>
+      <form id="add-design-form" class="product-form">
+        <div class="form-row">
+          <label>Title<input type="text" name="title" required /></label>
+          <label>Client<input type="text" name="client" /></label>
+        </div>
+        <label>Project Type<input type="text" name="project_type" placeholder="e.g., Branding, UI/UX Design" /></label>
+        <label>Summary (for the homepage card)<textarea name="summary" rows="2" required></textarea></label>
+        <label>Creative Brief (the full story)<textarea name="creative_brief" rows="6"></textarea></label>
+        <label>Tools Used (comma-separated)<input type="text" name="tools_used" placeholder="Figma, Illustrator, Photoshop" /></label>
+        <label>Cover Image<input type="file" id="cover-image-upload" accept="image/*" required /></label>
+        <input type="hidden" name="cover_image" id="cover-image-url" />
+        <div class="form-actions">
+          <div class="upload-status" id="form-status"></div>
+          <button type="submit" id="submit-btn" class="btn btn-primary">Add Project</button>
+        </div>
+      </form>
+    </section>
+    <section class="admin-section">
+      <h2>Manage Existing Projects</h2>
+      <ul class="design-list" id="design-list">
+        {designs.map(design => (
+          <li>
+            <img src={design.cover_image || 'https://placehold.co/100x100/f5f5f7/6e6e73?text=No+Img'} class="design-thumb" />
+            <span class="design-title">{design.title}</span>
+            <div class="design-actions">
+              <a href={`/admin/edit/${design.id}`} class="btn-action btn-edit">Edit</a>
+              <button class="btn-action btn-delete" data-design-id={design.id}>Delete</button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</MainLayout>
+<script>
+  // --- Type-Safe Element Selectors ---
+  const addForm = document.getElementById('add-design-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const formStatus = document.getElementById('form-status') as HTMLDivElement | null;
+  const imageInput = document.getElementById('cover-image-upload') as HTMLInputElement | null;
+  const designList = document.getElementById('design-list');
+
+  // --- Fully Included uploadFile function ---
+  async function uploadFile(file: File): Promise<string> {
+    const response = await fetch('/api/designs/upload', {
+      method: 'POST',
+      body: file,
+      headers: { 'Content-Type': file.type }
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(`Upload failed: ${result.error || 'Unknown error'}`);
+    }
+    const result = await response.json();
+    return result.url;
+  }
+
+  // --- Add Project Event Listener ---
+  addForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if(!submitBtn || !formStatus || !imageInput) return;
+
+    submitBtn.disabled = true;
+    formStatus.textContent = 'Uploading cover image...';
+    
+    const coverImageFile = imageInput.files?.[0];
+
+    try {
+      if (!coverImageFile) throw new Error('Cover image is required.');
+      
+      formStatus.textContent = 'Processing...';
+      const imageUrl = await uploadFile(coverImageFile);
+      
+      const formData = new FormData(addForm);
+      const designData = {
+        title: formData.get('title'),
+        client: formData.get('client'),
+        project_type: formData.get('project_type'),
+        summary: formData.get('summary'),
+        creative_brief: formData.get('creative_brief'),
+        cover_image: imageUrl,
+        gallery_images: [], // Gallery images can be added via the Edit page later
+        tools_used: (formData.get('tools_used') as string).split(',').map(t => t.trim()).filter(Boolean),
+      };
+
+      const response = await fetch('/api/designs/add', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(designData) 
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(`Failed to save project data: ${result.error}`);
+      }
+      
+      alert('Project added successfully!');
+      window.location.reload();
+
+    } catch (err) {
+      const error = err as Error;
+      alert(`Error: ${error.message}`);
+      submitBtn.disabled = false;
+      formStatus.textContent = '';
+    }
+  });
+
+  // --- Delete Project Event Listener ---
+  designList?.addEventListener('click', async e => {
+    const target = e.target as HTMLElement;
+    if(target.matches('.btn-delete')) {
+      const designId = target.dataset.designId;
+      if (!designId) return;
+
+      if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+        try {
+          const response = await fetch('/api/designs/delete', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ id: designId }) 
+          });
+
+          if(response.ok) {
+            target.closest('li')?.remove();
+            alert('Project deleted.');
+          } else {
+            const result = await response.json();
+            throw new Error(result.error || 'Failed to delete project.');
+          }
+        } catch (err) {
+          const error = err as Error;
+          alert(`Error: ${error.message}`);
+        }
+      }
+    }
+  });
+</script>

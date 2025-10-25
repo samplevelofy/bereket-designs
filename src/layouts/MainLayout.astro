@@ -1,0 +1,38 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props { title: string; }
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Your Name - Graphic Designer</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <Header />
+    <main class="container">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      try {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        const applyTheme = () => { document.documentElement.className = tg.colorScheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); };
+        tg.onEvent("themeChanged", applyTheme);
+        applyTheme();
+      } catch (e) {
+        console.warn("Telegram script not found, using system theme.");
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', isDark);
+      }
+    </script>
+  </body>
+</html>

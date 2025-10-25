@@ -1,0 +1,31 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import DesignCard from '../components/DesignCard.astro';
+import { supabase } from '../lib/supabase';
+import type { Design } from '../lib/types';
+
+let designs: Design[] = [];
+const { data, error } = await supabase.from('designs').select('*').order('created_at', { ascending: false });
+if (data) { designs = data; }
+if (error) { console.error("Error fetching designs:", error.message); }
+---
+<MainLayout title="My Work">
+  <section class="hero">
+    <h1>A showcase of creativity & skill in graphic design.</h1>
+    <p>Specializing in branding, UI/UX, and illustration.</p>
+  </section>
+  <div class="masonry-grid">
+    {designs.map(design => <DesignCard design={design} />)}
+  </div>
+</MainLayout>
+<style>
+  .hero { text-align: center; padding: 4rem 0; }
+  h1 { font-size: 3rem; max-width: 800px; margin: 0 auto 1rem; }
+  .hero p { font-size: 1.25rem; color: var(--hint-color); }
+  .masonry-grid {
+    column-gap: 1.5rem;
+    column-count: 1;
+  }
+  @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+  @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+</style>
