@@ -1,23 +1,22 @@
+/* --- THE NEW BEREKET DESIGNS COLOR PALETTE --- */
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1d1d1f;
-  --hint-color: #6e6e73;
-  --link-color: #007aff;
-  --accent-color: #007aff;
-  --secondary-bg-color: #f5f5f7;
-  --header-bg-color: rgba(255, 255, 255, 0.8);
-  --border-color: #d2d2d7;
+  --bg-color: #C0DFE7; /* Light Blue */
+  --text-color: #014122; /* Deep Green */
+  --hint-color: #526c73;
+  --accent-color: #FF4D00; /* Bright Orange */
+  --secondary-bg-color: rgba(255, 255, 255, 0.5);
+  --border-color: rgba(1, 65, 34, 0.2);
+  --glow-color: #FF4D00;
 }
 
 html.dark {
-  --bg-color: #111111;
-  --text-color: #f5f5f7;
-  --hint-color: #86868b;
-  --link-color: #0e84ff;
-  --accent-color: #0e84ff;
-  --secondary-bg-color: #1c1c1e;
-  --header-bg-color: rgba(28, 28, 30, 0.8);
-  --border-color: #3a3a3c;
+  --bg-color: #014122; /* Deep Green */
+  --text-color: #C0DFE7; /* Light Blue */
+  --hint-color: #a0b8bf;
+  --accent-color: #FF4D00; /* Bright Orange */
+  --secondary-bg-color: rgba(192, 223, 231, 0.1);
+  --border-color: rgba(192, 223, 231, 0.2);
+  --glow-color: #FF7B4D;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -26,17 +25,25 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   background-color: var(--bg-color);
+  /* The gradient background to make glass morphism work */
+  background-image: linear-gradient(120deg, var(--bg-color), color-mix(in srgb, var(--bg-color) 80%, #730000));
+  background-attachment: fixed;
   color: var(--text-color);
   font-size: 1.1rem;
   line-height: 1.6;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem; }
 
-a { color: var(--link-color); text-decoration: none; }
-h1, h2, h3 { margin: 0 0 1rem 0; line-height: 1.3; font-weight: 600; }
+a { color: var(--accent-color); text-decoration: none; font-weight: 500; }
+h1, h2, h3 { margin: 0 0 1rem 0; line-height: 1.3; font-weight: 700; }
 p { margin: 0 0 1rem 0; }
+
+/* --- REUSABLE GLASS MORPHISM CLASS --- */
+.glass-morphism {
+  background: var(--secondary-bg-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+}

@@ -2,10 +2,6 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import { supabase } from '../../lib/supabase';
 import type { Design } from '../../lib/types';
-
-// !!! THIS IS THE FIX !!!
-// This line tells Astro to render this page on the server for every request,
-// instead of trying to build it statically ahead of time.
 export const prerender = false;
 
 const { id } = Astro.params;
@@ -26,9 +22,7 @@ if (!design) { return new Response("Design not found", { status: 404 }); }
         <span><strong>Project Type:</strong> {design.project_type}</span>
       </div>
     </header>
-    
     <img src={design.cover_image} alt={design.title} class="hero-image" />
-    
     <div class="design-content">
       <div class="main-body">
         <h2>Creative Brief</h2>
@@ -37,7 +31,7 @@ if (!design) { return new Response("Design not found", { status: 404 }); }
         </div>
       </div>
       <aside class="sidebar">
-        <div class="sidebar-box">
+        <div class="sidebar-box glass-morphism">
           <h3>Tools Used</h3>
           <ul class="tools-list">
             {design.tools_used?.map(tool => <li>{tool}</li>)}
@@ -45,7 +39,6 @@ if (!design) { return new Response("Design not found", { status: 404 }); }
         </div>
       </aside>
     </div>
-
     {design.gallery_images && design.gallery_images.length > 0 && (
       <section class="gallery">
         <h2>Gallery</h2>
@@ -66,10 +59,12 @@ if (!design) { return new Response("Design not found", { status: 404 }); }
   @media(min-width: 900px) { .design-content { grid-template-columns: 2.5fr 1fr; } }
   .brief-text p { margin-bottom: 1.5rem; }
   h2 { font-size: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
-  .sidebar-box { background: var(--secondary-bg-color); padding: 1.5rem; border-radius: 16px; position: sticky; top: 100px; }
+  .sidebar-box { padding: 1.5rem; position: sticky; top: 110px; }
   .tools-list { list-style: none; padding: 0; margin: 0; }
-  .tools-list li { background: var(--bg-color); padding: 0.5rem 1rem; border-radius: 8px; margin-bottom: 0.5rem; font-weight: 500; }
+  .tools-list li { background-color: rgba(0,0,0,0.1); padding: 0.5rem 1rem; border-radius: 8px; margin-bottom: 0.5rem; font-weight: 500; }
+  .dark .tools-list li { background-color: rgba(255,255,255,0.1); }
   .gallery { margin-top: 5rem; }
   .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media(min-width: 768px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
   .gallery-grid img { width: 100%; border-radius: 16px; }
 </style>

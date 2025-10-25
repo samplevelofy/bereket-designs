@@ -7,25 +7,49 @@ import type { Design } from '../lib/types';
 let designs: Design[] = [];
 const { data, error } = await supabase.from('designs').select('*').order('created_at', { ascending: false });
 if (data) { designs = data; }
-if (error) { console.error("Error fetching designs:", error.message); }
 ---
-<MainLayout title="My Work">
+<MainLayout title="bereket designs - Portfolio">
+  <!-- The new Hero Section -->
   <section class="hero">
-    <h1>A showcase of creativity & skill in graphic design.</h1>
-    <p>Specializing in branding, UI/UX, and illustration.</p>
+    <div class="hero-content">
+      <h1 class="glowing-text">PORTFOLIO</h1>
+      <!-- IMPORTANT: Replace this placeholder with the URL to your cutout image! -->
+      <img src="https://placehold.co/800x800/ff0000/ffffff.png?text=Your+Cutout+Image" alt="Bereket Tadele" class="hero-image" />
+    </div>
   </section>
+  
   <div class="masonry-grid">
-    {designs.map(design => <DesignCard design={design} />)}
+    {designs.map(design => (
+      <div class="card-wrapper glass-morphism">
+        <DesignCard design={design} />
+      </div>
+    ))}
   </div>
 </MainLayout>
 <style>
-  .hero { text-align: center; padding: 4rem 0; }
-  h1 { font-size: 3rem; max-width: 800px; margin: 0 auto 1rem; }
-  .hero p { font-size: 1.25rem; color: var(--hint-color); }
-  .masonry-grid {
-    column-gap: 1.5rem;
-    column-count: 1;
+  .hero { height: 60vh; display: flex; align-items: center; justify-content: center; margin-bottom: 4rem; }
+  .hero-content { position: relative; width: 100%; max-width: 800px; display: flex; align-items: center; justify-content: center; }
+  .glowing-text {
+    font-size: clamp(4rem, 15vw, 10rem); /* Responsive font size */
+    font-weight: 900;
+    color: var(--text-color);
+    text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 40px rgba(255, 77, 0, 0.5);
+    z-index: 1;
+    position: relative; /* Changed from absolute */
   }
+  .hero-image {
+    position: absolute;
+    bottom: -10%; /* Adjust to position your cutout */
+    height: 100%;
+    max-height: 500px;
+    width: auto;
+    z-index: 2;
+    object-fit: contain;
+    pointer-events: none; /* Make image non-interactive */
+  }
+
+  .masonry-grid { column-gap: 1.5rem; column-count: 1; }
   @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
   @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+  .card-wrapper { break-inside: avoid; margin-bottom: 1.5rem; }
 </style>
