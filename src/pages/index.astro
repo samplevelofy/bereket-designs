@@ -8,25 +8,101 @@ let designs: Design[] = [];
 const { data } = await supabase.from('designs').select('*').order('created_at', { ascending: false });
 if (data) { designs = data; }
 ---
-<PortfolioLayout title="Selected Work">
-  <header class="page-header">
-    <h1>Selected Work</h1>
-  </header>
-  <div class="masonry-grid">
-    {designs.map(design => <DesignCard design={design} />)}
-  </div>
+<PortfolioLayout title="Home">
+  <!-- 1. HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Bereket Tadele — <br>Graphic Designer & Visual Storyteller</h1>
+      <p>Crafting impactful brand identities and intuitive digital experiences that connect with audiences.</p>
+      <a href="#work" class="cta-button">View My Work</a>
+    </div>
+  </section>
+
+  <!-- 2. SELECTED WORK SECTION -->
+  <section id="work" class="work-section">
+    <header class="section-header">
+      <h2>Selected Work</h2>
+    </header>
+    <div class="masonry-grid">
+      {designs.map(design => <DesignCard design={design} />)}
+    </div>
+  </section>
+
+  <!-- 3. CONTACT SECTION -->
+  <section class="contact-section">
+    <div class="contact-content">
+      <h2>Let's Create Together</h2>
+      <p>Have a project in mind? I'm always open to new challenges and collaborations. Let's discuss how we can bring your vision to life.</p>
+      <a href="mailto:bereketdesigns@gmail.com" class="cta-button">Send an Email</a>
+    </div>
+  </section>
 </PortfolioLayout>
 <style>
-  .page-header {
-    margin-bottom: 3rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+  .hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 0;
   }
-  h1 { font-size: 2.5rem; }
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+  }
+  .hero p {
+    font-size: 1.25rem;
+    color: var(--hint-color);
+    margin: 1.5rem 0 2.5rem;
+  }
+  .cta-button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .work-section {
+    padding: 4rem 0;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  h2 { font-size: 2.5rem; }
+
   .masonry-grid {
     column-gap: 1.5rem;
     column-count: 1;
   }
   @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
   @media (min-width: 1200px) { .masonry-grid { column-count: 3; } }
+
+  .contact-section {
+    padding: 6rem 0;
+    background-color: var(--secondary-bg-color);
+    border-radius: 24px;
+    margin: 4rem 0;
+  }
+  .contact-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .contact-content p {
+    font-size: 1.1rem;
+    color: var(--hint-color);
+    margin: 1rem 0 2rem;
+  }
 </style>

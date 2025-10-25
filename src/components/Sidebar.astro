@@ -1,7 +1,7 @@
 ---
 const brandName = "bereket designs"; const fullName = "Bereket Tadele"; const jobTitle = "Graphic Designer & Visual Storyteller"; const bio = "A creative force specializing in brand identity and UI/UX. I transform complex ideas into clean, impactful, and beautiful designs."; const profileImage = "/profile-photo.jpg"; const socialLinks = { behance: "https://www.behance.net/bereketdesigns", dribbble: "https://dribbble.com/bereketdesigns", linkedin: "https://linkedin.com/in/bereketdesigns", };
 ---
-<aside id="sidebar" class="sidebar glass-morphism">
+<aside id="sidebar" class="sidebar">
   <div class="sidebar-content">
     <a href="/" class="profile-header"><img src={profileImage} alt={fullName} class="profile-photo" /><div class="profile-text"><h2>{fullName}</h2><p class="brand-name">@{brandName}</p></div></a>
     <nav class="sidebar-nav"><a href="/">Work</a><a href="/about">About</a></nav>
@@ -19,24 +19,25 @@ const brandName = "bereket designs"; const fullName = "Bereket Tadele"; const jo
   </div>
 </aside>
 <style>
-  .sidebar { border-right: none; height: calc(100vh - 2rem); position: sticky; top: 1rem; margin: 1rem; display: flex; flex-direction: column; z-index: 200; }
-  @media (max-width: 1023px) { .sidebar { position: fixed; top: 0; left: 0; margin: 0; height: 100%; width: 300px; border-radius: 0; transform: translateX(-100%); transition: transform 0.3s ease; will-change: transform; } .sidebar.is-open { transform: translateX(0); } }
-  .sidebar-content { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; }
-  .profile-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .sidebar { background-color: var(--secondary-bg-color); border-right: 1px solid var(--border-color); height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; z-index: 200; }
+  @media (max-width: 1023px) { .sidebar { position: fixed; top: 0; left: 0; margin: 0; height: 100%; width: 300px; border-radius: 0; transform: translateX(-100%); transition: transform 0.3s ease; will-change: transform; border: none; } .sidebar.is-open { transform: translateX(0); } }
+  .sidebar-content { display: flex; flex-direction: column; height: 100%; padding: 2rem; }
+  .profile-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem; text-decoration: none; }
   .profile-photo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
   h2 { font-size: 1.25rem; margin: 0; color: var(--text-color); }
   .brand-name { font-size: 1rem; color: var(--hint-color); margin: 0; }
   .sidebar-nav { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
   .sidebar-nav a { font-size: 1.1rem; font-weight: 500; color: var(--text-color); padding: 0.75rem 1rem; border-radius: 10px; transition: background-color 0.2s, color 0.2s; }
-  .sidebar-nav a:hover, .sidebar-nav a.is-active { background-color: var(--accent-color); color: #fff; }
+  .sidebar-nav a:hover, .sidebar-nav a.is-active { background-color: var(--accent-color); color: var(--bg-color); }
   .sidebar-bio { font-size: 0.95rem; color: var(--hint-color); line-height: 1.5; }
   .sidebar-footer { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
   .social-links { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
-  .social-links a { font-weight: 500; font-size: 0.9rem; color: var(--hint-color); }
+  .social-links a { font-weight: 500; font-size: 0.9rem; color: var(--hint-color); transition: color 0.2s; }
+  .social-links a:hover { color: var(--accent-color); }
   .footer-actions { display: flex; justify-content: space-between; align-items: center; }
   .copyright { font-size: 0.8rem; color: var(--hint-color); opacity: 0.7; margin: 0; }
-  .theme-toggle { background: none; border: none; cursor: pointer; color: var(--hint-color); padding: 0.5rem; border-radius: 50%; display: flex; transition: background-color 0.2s; }
-  .theme-toggle:hover { background-color: var(--border-color); }
+  .theme-toggle { background: none; border: none; cursor: pointer; color: var(--hint-color); padding: 0.5rem; border-radius: 50%; display: flex; transition: background-color 0.2s, color 0.2s; }
+  .theme-toggle:hover { color: var(--text-color); background-color: var(--border-color); }
   .icon-moon, .dark .icon-sun { display: none; }
   .icon-sun, .dark .icon-moon { display: block; }
 </style>
